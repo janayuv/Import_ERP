@@ -1,0 +1,1 @@
+psql -h localhost -U importerp -d erp_db -p 5432

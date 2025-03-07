@@ -1,0 +1,10 @@
+{
+    "development": {
+      "username": "importerp",
+      "password": "inzi@123",
+      "database": "erp_db",
+      "host": "localhost",
+      "dialect": "postgres",
+      "port": 5432
+    }
+  }  
