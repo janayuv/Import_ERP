@@ -15,14 +15,26 @@ router.post('/', async (req, res) => {
 });
 
 // Get all shipments
+// Updated GET endpoint that includes associated Invoices and BLAWBs
 router.get('/', async (req, res) => {
     try {
-        const shipments = await Shipment.findAll();
-        res.json(shipments);
+      const shipments = await Shipment.findAll({
+        include: [
+          {
+            model: Invoice,
+            attributes: ['invoice_no', 'date', 'invoice_total'],
+          },
+          {
+            model: BLAWB,
+            attributes: ['blawb_no', 'date', 'etd', 'eta'],
+          },
+        ],
+      });
+      res.json(shipments);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching shipments.', error: error.message });
+      res.status(500).json({ message: 'Error fetching shipments.', error: error.message });
     }
-});
+  });  
 
 // Get total invoice amount for a shipment
 router.get('/total/:shipmentId', async (req, res) => {

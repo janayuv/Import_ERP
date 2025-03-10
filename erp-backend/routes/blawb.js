@@ -33,6 +33,22 @@ router.post('/shipments/:shipmentId/blawb', async (req, res) => {
     }
 });
 
+router.delete('/shipments/:shipmentId/blawb/:blawbId', async (req, res) => {
+    try {
+        const { shipmentId, blawbId } = req.params;
+        const result = await BLAWB.destroy({
+            where: { id: blawbId, shipment_id: shipmentId }
+        });
+        if (!result) {
+            return res.status(404).json({ message: 'BL/AWB not found' });
+        }
+        res.status(200).json({ message: 'BL/AWB deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting BL/AWB:', error);
+        res.status(500).json({ message: 'Error deleting BL/AWB.', error: error.message });
+    }
+});
+
 // Update BL/AWB
 router.put('/shipments/:shipmentId/blawb/:blawbId', async (req, res) => {
     try {
@@ -72,10 +88,11 @@ router.put('/shipments/:shipmentId/blawb/:blawbId', async (req, res) => {
 });
 
 // Get BL/AWB for a shipment
+// routes/blawb.js
 router.get('/shipments/:shipmentId/blawb', async (req, res) => {
     try {
         const { shipmentId } = req.params;
-        const blawb = await BLAWB.findOne({ where: { shipment_id: shipmentId } });
+        const blawb = await BLAWB.findOne({ where: { shipment_id: Number(shipmentId) } });
         if (!blawb) {
             return res.status(404).json({ message: 'BL/AWB not found' });
         }

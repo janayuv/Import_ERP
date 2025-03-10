@@ -1,0 +1,13 @@
+{
+  "name": "import-erp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:backend": "cd erp-backend && npm run dev",
+    "start:frontend": "cd erp-frontend && npm start",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
