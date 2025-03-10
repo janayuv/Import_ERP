@@ -8,26 +8,27 @@ const Shipment = require('../models/Shipment');
 router.post('/shipments/:shipmentId/blawb', async (req, res) => {
     try {
         const t = await sequelize.transaction();
-        try {
-            const { shipmentId } = req.params;
-            const blawbData = { ...req.body, shipment_id: shipmentId };
-
-            // Create the BL/AWB record
-            const newBlawb = await BLAWB.create(blawbData, { transaction: t });
-
-            // Update shipment status (if the shipment model includes a status field)
-            await Shipment.update({ status: 'BL_AWB_CREATED' }, {
-                where: { id: shipmentId },
-                transaction: t
-            });
-
-            await t.commit();
-            res.status(201).json({ message: 'BL/AWB created successfully', data: newBlawb });
-        } catch (error) {
+        const { shipmentId } = req.params;
+        
+        // Check if shipment exists
+        const shipment = await Shipment.findByPk(shipmentId);
+        if (!shipment) {
             await t.rollback();
-            throw error;
+            return res.status(404).json({ message: 'Shipment not found' });
         }
+
+        const blawbData = { ...req.body, shipment_id: shipmentId };
+        const newBlawb = await BLAWB.create(blawbData, { transaction: t });
+
+        await Shipment.update({ status: 'BL_AWB_CREATED' }, {
+            where: { id: shipmentId },
+            transaction: t
+        });
+
+        await t.commit();
+        res.status(201).json({ message: 'BL/AWB created successfully', data: newBlawb });
     } catch (error) {
+        await t.rollback();
         console.error('Error creating BL/AWB:', error);
         res.status(500).json({ message: 'Error creating BL/AWB.', error: error.message });
     }
