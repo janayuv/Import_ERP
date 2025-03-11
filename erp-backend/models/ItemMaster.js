@@ -1,6 +1,5 @@
-// erp-backend/models/ItemMaster.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // adjust path as needed
+const sequelize = require('../config/database'); // adjust the path as needed
 
 const ItemMaster = sequelize.define('ItemMaster', {
   part_no: {

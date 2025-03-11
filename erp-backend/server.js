@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const dotenv = require('dotenv');
+const sequelize = require('./config/database');
 
 // Import routes
 const shipmentRoutes = require('./routes/shipment');
