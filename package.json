@@ -2,6 +2,8 @@
   "name": "import-erp",
   "version": "1.0.0",
   "private": true,
+  "workspaces": ["erp-backend", "erp-frontend"
+  ],
   "scripts": {
     "start:backend": "cd erp-backend && npm run dev",
     "start:frontend": "cd erp-frontend && npm start",
